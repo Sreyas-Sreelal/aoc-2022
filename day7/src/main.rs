@@ -101,11 +101,12 @@ fn main() {
     let mut dir_sizes: BTreeMap<String, usize> = BTreeMap::new();
 
     for x in dirs.keys() {
+        let size = compute_dir_size(&dir_sizes, &dirs, x.to_string());
         dir_sizes.insert(
             x.to_string(),
-            compute_dir_size(&dir_sizes, &dirs, x.to_string()),
+            size,
         );
-        let size = compute_dir_size(&dir_sizes, &dirs, x.to_string());
+        
         if size <= 100000 {
             output += size;
         }
