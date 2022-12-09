@@ -17,41 +17,49 @@ fn check_slope(h_x: &i32, h_y: &i32, t_x: &i32, t_y: &i32) -> Slope {
         Slope::VERTICAL
     }
 }
-fn compute_tail_pos(rope: &mut Vec<(i32, i32)>, idx: usize) {
-    match check_slope(
-        &rope[idx - 1].0,
-        &rope[idx - 1].1,
-        &rope[idx].0,
-        &rope[idx].1,
-    ) {
-        Slope::DIAGONAL => {
-            if rope[idx - 1].1 > rope[idx].1 {
-                rope[idx].1 += 1;
-            } else {
-                rope[idx].1 -= 1;
+fn compute_tail_pos(
+    rope: &mut Vec<(i32, i32)>,
+    idx: usize,
+    knot_locations: &mut Vec<BTreeSet<(i32, i32)>>,
+) {
+    if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2 {
+        match check_slope(
+            &rope[idx - 1].0,
+            &rope[idx - 1].1,
+            &rope[idx].0,
+            &rope[idx].1,
+        ) {
+            Slope::DIAGONAL => {
+                if rope[idx - 1].1 > rope[idx].1 {
+                    rope[idx].1 += 1;
+                } else {
+                    rope[idx].1 -= 1;
+                }
+                if rope[idx - 1].0 > rope[idx].0 {
+                    rope[idx].0 += 1;
+                } else {
+                    rope[idx].0 -= 1;
+                }
             }
-            if rope[idx - 1].0 > rope[idx].0 {
-                rope[idx].0 += 1;
-            } else {
-                rope[idx].0 -= 1;
+            Slope::HORIZONTAL => {
+                if rope[idx - 1].0 > rope[idx].0 {
+                    rope[idx].0 += 1;
+                } else {
+                    rope[idx].0 -= 1;
+                }
+            }
+            Slope::VERTICAL => {
+                if rope[idx - 1].1 > rope[idx].1 {
+                    rope[idx].1 += 1;
+                } else {
+                    rope[idx].1 -= 1;
+                }
             }
         }
-        Slope::HORIZONTAL => {
-            if rope[idx - 1].0 > rope[idx].0 {
-                rope[idx].0 += 1;
-            } else {
-                rope[idx].0 -= 1;
-            }
-        }
-        Slope::VERTICAL => {
-            if rope[idx - 1].1 > rope[idx].1 {
-                rope[idx].1 += 1;
-            } else {
-                rope[idx].1 -= 1;
-            }
-        }
+        knot_locations[idx].insert((rope[idx].0, rope[idx].1));
     }
 }
+
 fn main() {
     let input = include_str!("../input");
     let mut rope = Vec::new();
@@ -73,11 +81,7 @@ fn main() {
                     rope[0].0 += 1;
                     knot_locations[0].insert((rope[0].0, rope[0].1));
                     for idx in 1..10 {
-                        if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2
-                        {
-                            compute_tail_pos(&mut rope, idx);
-                            knot_locations[idx].insert((rope[idx].0, rope[idx].1));
-                        }
+                        compute_tail_pos(&mut rope, idx, &mut knot_locations);
                     }
                 }
             }
@@ -86,11 +90,7 @@ fn main() {
                     rope[0].1 += 1;
                     knot_locations[0].insert((rope[0].0, rope[0].1));
                     for idx in 1..10 {
-                        if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2
-                        {
-                            compute_tail_pos(&mut rope, idx);
-                            knot_locations[idx].insert((rope[idx].0, rope[idx].1));
-                        }
+                        compute_tail_pos(&mut rope, idx, &mut knot_locations);
                     }
                 }
             }
@@ -99,11 +99,7 @@ fn main() {
                     rope[0].0 -= 1;
                     knot_locations[0].insert((rope[0].0, rope[0].1));
                     for idx in 1..10 {
-                        if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2
-                        {
-                            compute_tail_pos(&mut rope, idx);
-                            knot_locations[idx].insert((rope[idx].0, rope[idx].1));
-                        }
+                        compute_tail_pos(&mut rope, idx, &mut knot_locations);
                     }
                 }
             }
@@ -112,11 +108,7 @@ fn main() {
                     rope[0].1 -= 1;
                     knot_locations[0].insert((rope[0].0, rope[0].1));
                     for idx in 1..10 {
-                        if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2
-                        {
-                            compute_tail_pos(&mut rope, idx);
-                            knot_locations[idx].insert((rope[idx].0, rope[idx].1));
-                        }
+                        compute_tail_pos(&mut rope, idx, &mut knot_locations);
                     }
                 }
             }
