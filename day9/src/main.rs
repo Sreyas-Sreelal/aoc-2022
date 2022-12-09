@@ -75,44 +75,20 @@ fn main() {
         let code = line_split.next().unwrap();
         let number: i32 = line_split.next().unwrap().parse().unwrap();
 
-        match code {
-            "R" => {
-                for _ in 0..number {
-                    rope[0].0 += 1;
-                    knot_locations[0].insert((rope[0].0, rope[0].1));
-                    for idx in 1..10 {
-                        compute_tail_pos(&mut rope, idx, &mut knot_locations);
-                    }
-                }
-            }
-            "U" => {
-                for _ in 0..number {
-                    rope[0].1 += 1;
-                    knot_locations[0].insert((rope[0].0, rope[0].1));
-                    for idx in 1..10 {
-                        compute_tail_pos(&mut rope, idx, &mut knot_locations);
-                    }
-                }
-            }
-            "L" => {
-                for _ in 0..number {
-                    rope[0].0 -= 1;
-                    knot_locations[0].insert((rope[0].0, rope[0].1));
-                    for idx in 1..10 {
-                        compute_tail_pos(&mut rope, idx, &mut knot_locations);
-                    }
-                }
-            }
-            "D" => {
-                for _ in 0..number {
-                    rope[0].1 -= 1;
-                    knot_locations[0].insert((rope[0].0, rope[0].1));
-                    for idx in 1..10 {
-                        compute_tail_pos(&mut rope, idx, &mut knot_locations);
-                    }
-                }
-            }
+        let offest = match code {
+            "R" => (1, 0),
+            "U" => (0, 1),
+            "L" => (-1, 0),
+            "D" => (0, -1),
             _ => panic!("Invalid Code!!"),
+        };
+        for _ in 0..number {
+            rope[0].0 += offest.0;
+            rope[0].1 += offest.1;
+            knot_locations[0].insert((rope[0].0, rope[0].1));
+            for idx in 1..10 {
+                compute_tail_pos(&mut rope, idx, &mut knot_locations);
+            }
         }
     }
     println!("part 1: {}", knot_locations[1].len());
