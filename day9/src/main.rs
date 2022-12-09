@@ -17,29 +17,34 @@ fn check_slope(h_x: &i32, h_y: &i32, t_x: &i32, t_y: &i32) -> Slope {
         Slope::VERTICAL
     }
 }
-fn compute_tail_pos(rope:&mut Vec<(i32,i32)>,idx:usize) {
-    match check_slope(&rope[idx-1].0, &rope[idx-1].1, &rope[idx].0, &rope[idx].1) {
+fn compute_tail_pos(rope: &mut Vec<(i32, i32)>, idx: usize) {
+    match check_slope(
+        &rope[idx - 1].0,
+        &rope[idx - 1].1,
+        &rope[idx].0,
+        &rope[idx].1,
+    ) {
         Slope::DIAGONAL => {
-            if rope[idx-1].1 > rope[idx].1 {
+            if rope[idx - 1].1 > rope[idx].1 {
                 rope[idx].1 += 1;
             } else {
                 rope[idx].1 -= 1;
             }
-            if rope[idx-1].0 > rope[idx].0 {
+            if rope[idx - 1].0 > rope[idx].0 {
                 rope[idx].0 += 1;
             } else {
                 rope[idx].0 -= 1;
             }
         }
         Slope::HORIZONTAL => {
-            if rope[idx-1].0 > rope[idx].0 {
+            if rope[idx - 1].0 > rope[idx].0 {
                 rope[idx].0 += 1;
             } else {
                 rope[idx].0 -= 1;
             }
         }
         Slope::VERTICAL => {
-            if rope[idx-1].1 > rope[idx].1 {
+            if rope[idx - 1].1 > rope[idx].1 {
                 rope[idx].1 += 1;
             } else {
                 rope[idx].1 -= 1;
@@ -52,9 +57,9 @@ fn main() {
     let mut rope = Vec::new();
     let mut knot_locations = Vec::new();
     for i in 0..10 {
-        rope.push((0,0));
+        rope.push((0, 0));
         knot_locations.push(BTreeSet::new());
-        knot_locations[i].insert((0,0));
+        knot_locations[i].insert((0, 0));
     }
 
     for line in input.lines() {
@@ -64,31 +69,29 @@ fn main() {
 
         match code {
             "R" => {
-                
-                    for _ in 0..number {
-                        rope[0].0 += 1;
-                        knot_locations[0].insert((rope[0].0, rope[0].1));
-                        for idx in 1..10 {
-                            if distance(rope[idx-1].0, rope[idx-1].1, rope[idx].0, rope[idx].1) == 2 {
-                                compute_tail_pos(&mut rope,idx);
-                                knot_locations[idx].insert((rope[idx].0, rope[idx].1));
-                            }
+                for _ in 0..number {
+                    rope[0].0 += 1;
+                    knot_locations[0].insert((rope[0].0, rope[0].1));
+                    for idx in 1..10 {
+                        if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2
+                        {
+                            compute_tail_pos(&mut rope, idx);
+                            knot_locations[idx].insert((rope[idx].0, rope[idx].1));
                         }
-                        
                     }
-                
+                }
             }
             "U" => {
                 for _ in 0..number {
                     rope[0].1 += 1;
                     knot_locations[0].insert((rope[0].0, rope[0].1));
                     for idx in 1..10 {
-                        if distance(rope[idx-1].0, rope[idx-1].1, rope[idx].0, rope[idx].1) == 2 {
-                            compute_tail_pos(&mut rope,idx);
+                        if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2
+                        {
+                            compute_tail_pos(&mut rope, idx);
                             knot_locations[idx].insert((rope[idx].0, rope[idx].1));
                         }
                     }
-                    
                 }
             }
             "L" => {
@@ -96,12 +99,12 @@ fn main() {
                     rope[0].0 -= 1;
                     knot_locations[0].insert((rope[0].0, rope[0].1));
                     for idx in 1..10 {
-                        if distance(rope[idx-1].0, rope[idx-1].1, rope[idx].0, rope[idx].1) == 2 {
-                            compute_tail_pos(&mut rope,idx);
+                        if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2
+                        {
+                            compute_tail_pos(&mut rope, idx);
                             knot_locations[idx].insert((rope[idx].0, rope[idx].1));
                         }
                     }
-                    
                 }
             }
             "D" => {
@@ -109,12 +112,12 @@ fn main() {
                     rope[0].1 -= 1;
                     knot_locations[0].insert((rope[0].0, rope[0].1));
                     for idx in 1..10 {
-                        if distance(rope[idx-1].0, rope[idx-1].1, rope[idx].0, rope[idx].1) == 2 {
-                            compute_tail_pos(&mut rope,idx);
+                        if distance(rope[idx - 1].0, rope[idx - 1].1, rope[idx].0, rope[idx].1) == 2
+                        {
+                            compute_tail_pos(&mut rope, idx);
                             knot_locations[idx].insert((rope[idx].0, rope[idx].1));
                         }
                     }
-                    
                 }
             }
             _ => panic!("Invalid Code!!"),
