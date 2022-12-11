@@ -130,7 +130,7 @@ fn main() {
 
     monkey_p1.sort_by(|x, y| y.inspect_count.cmp(&x.inspect_count));
     println!(
-        " part2: {:?}",
+        " part1: {:?}",
         monkey_p1[0].inspect_count * monkey_p1[1].inspect_count
     );
 
